@@ -67,7 +67,7 @@ library(h2o)
 #library(plyr)
 #library(tidyr)
 
-arg_params = commandarg_params(trailingOnly=TRUE)
+arg_params = commandArgs(trailingOnly=TRUE)
 # test if there is at least one argument: if not, return an error
 if (length(arg_params)==0) {
   arg_params[1] <- "data.txt"
