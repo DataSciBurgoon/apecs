@@ -127,10 +127,8 @@ rownames(in_vitro_chem_assay_corr_estrogen_wide)[nrow(in_vitro_chem_assay_corr_e
 #localH2O = h2o.init(max_mem_size = "13g", nthreads=6)
 localH2O = h2o.init(max_mem_size = arg_params[2], nthreads=as.numeric(arg_params[3]))
 estrogenic.hex<-as.h2o(in_vitro_chem_assay_corr_estrogen_wide, destination_frame="train.hex")
-estrogenic_autoencoder <- h2o.loadModel("DeepLearning_model_R_1481832873762_1613")
-
-estrogenic.hex.slice <- estrogenic.hex[50:65, ]
-estrogenic_supervised_features3 <- h2o.deepfeatures(estrogenic_autoencoder, estrogenic.hex.slice, layer=2)
+estrogenic_autoencoder <- h2o.loadModel("DeepLearning_model_R_1481832873762_1608")
+estrogenic_supervised_features3 <- h2o.deepfeatures(estrogenic_autoencoder, estrogenic.hex, layer=2)
 
 
 # estrogenic_autoencoder = h2o.deeplearning(
