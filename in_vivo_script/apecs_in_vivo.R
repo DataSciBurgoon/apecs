@@ -70,7 +70,9 @@ library(h2o)
 arg_params = commandarg_params(trailingOnly=TRUE)
 # test if there is at least one argument: if not, return an error
 if (length(arg_params)==0) {
-  stop("You must supply an input file", call.=FALSE)
+  arg_params[1] <- "data.txt"
+  arg_params[2] <- "2g"
+  arg_params[3] <- 2
 } else if(length(arg_params)==1 && class(arg_params[1]) == "character"){
   arg_params[2] <- "2g"
   arg_params[3] <- 2
