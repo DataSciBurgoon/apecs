@@ -1,15 +1,15 @@
-#apecs_in_vitro.R
+#apecs_in_vivo.R
 #
-# Autoencoder Predicting Estrogenic Chemical Substances (APECS) -- in vitro 
+# Autoencoder Predicting Estrogenic Chemical Substances (APECS) -- in vivo 
 #
 # Author: Lyle D. Burgoon, Ph.D.
 # US Army Research and Development Center
 # License: CC0/Public Domain
 #
 # Description:
-# This script predicts if a chemical is estrogenic or not based on the in vitro
+# This script predicts if a chemical is estrogenic or not based on the in vivo animal
 # estrogenicity database provided in Browne et al 
-# (2015, Environmental Science and Technology, 49(14): 8804-8814) based on 
+# (2015, Environmental Science and Technology, 49(14): 8804-8814) using the 
 # ToxCast assay data. Data can be used from the same in vitro assays as ToxCast 
 # so long as the input data meet the same structure.
 #

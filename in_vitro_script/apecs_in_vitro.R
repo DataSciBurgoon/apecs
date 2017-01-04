@@ -9,7 +9,7 @@
 # Description:
 # This script predicts if a chemical is estrogenic or not based on the in vitro
 # estrogenicity database provided in Browne et al 
-# (2015, Environmental Science and Technology, 49(14): 8804-8814) based on 
+# (2015, Environmental Science and Technology, 49(14): 8804-8814) using the
 # ToxCast assay data. Data can be used from the same in vitro assays as ToxCast 
 # so long as the input data meet the same structure.
 #
