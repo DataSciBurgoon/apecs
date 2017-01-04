@@ -57,7 +57,7 @@ list_of_packages <- c("ggplot2", "h2o")
 #If not, then install them.
 
 new_packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
-if(length(new_packages)) install.packages(new_packages)
+if(length(new_packages)) install.packages(new_packages, repos='http://cran.rstudio.com')
 library(ggplot2)
 library(h2o)
 #library(gRain)
