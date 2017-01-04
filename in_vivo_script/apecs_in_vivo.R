@@ -51,7 +51,7 @@ similarity_analysis <- function(x, comparator_estimates, data){
   }
 }
 
-list_of_packages <- c("ggplot2", "h2o")
+list_of_packages <- c("ggplot2", "h2o", "plyr")
 
 #Test to see if ggplot2 and h2o are installed.
 #If not, then install them.
@@ -60,6 +60,7 @@ new_packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"
 if(length(new_packages)) install.packages(new_packages, repos='http://archive.linux.duke.edu/cran/')
 library(ggplot2)
 library(h2o)
+library(plyr)
 #library(gRain)
 #library(ROCR)
 #library(pracma)
