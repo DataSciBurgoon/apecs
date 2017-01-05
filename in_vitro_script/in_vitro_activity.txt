@@ -1,0 +1,6 @@
+"chem"	"dist"	"estrogenic"
+"17-Methyltestosterone"	1.30441916839177	"estrogenic"
+"2,2',4,4'-Tetrahydroxybenzophenone"	0.492376111744328	"estrogenic"
+"Estriol"	0.614187994847148	"estrogenic"
+"17-beta estradiol"	0	"estrogenic"
+"Dihexyl phthalate"	1.49909164438149	"not estrogenic"

@@ -51,7 +51,7 @@ similarity_analysis <- function(x, comparator_estimates, data){
   }
 }
 
-list_of_packages <- c("ggplot2", "h2o", "plyr")
+list_of_packages <- c("ggplot2", "h2o", "plyr", "dplyr", "tidyr")
 
 #Test to see if ggplot2 and h2o are installed.
 #If not, then install them.
@@ -61,12 +61,11 @@ if(length(new_packages)) install.packages(new_packages, repos='http://archive.li
 library(ggplot2)
 library(h2o)
 library(plyr)
+library(dplyr)
+library(tidyr)
 #library(gRain)
 #library(ROCR)
 #library(pracma)
-#library(dplyr)
-#library(plyr)
-#library(tidyr)
 
 arg_params = commandArgs(trailingOnly=TRUE)
 # test if there is at least one argument: if not, return an error
@@ -85,7 +84,7 @@ toxcast_full <- read.csv(file=arg_params[1], header=TRUE, sep="\t")
 
 #save(per_chem_assay_logc, file="per_chem_assay_logc.RData")
 
-in_vitro_per_chem_assay_logc <- ddply(toxcast_full, .(chnm, assay_name, logc, gene_name), 
+in_vitro_per_chem_assay_logc <- plyr::ddply(toxcast_full, .(chnm, assay_name, logc, gene_name), 
                                       summarise, mean_resp=mean(resp))
 
 #Toxcast assays for the ER positive ground truth

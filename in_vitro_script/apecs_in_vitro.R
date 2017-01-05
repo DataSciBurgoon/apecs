@@ -47,11 +47,12 @@ similarity_analysis <- function(x, comparator_estimates, data){
   if(nrow(chem_data) > 3){
     chem_estimate <- loess_calc(chem_data)
     chem_correlation <- cor(chem_estimate, comparator_estimates[, assay])
+    print(chem_correlation)
     return(c(chem_name, assay, chem_correlation))
   }
 }
 
-list_of_packages <- c("ggplot2", "h2o", "plyr")
+list_of_packages <- c("ggplot2", "h2o", "plyr", "dplyr", "tidyr")
 
 #Test to see if ggplot2 and h2o are installed.
 #If not, then install them.
@@ -61,14 +62,13 @@ if(length(new_packages)) install.packages(new_packages, repos='http://archive.li
 library(ggplot2)
 library(h2o)
 library(plyr)
+library(dplyr)
+library(tidyr)
 #library(gRain)
 #library(ROCR)
 #library(pracma)
-#library(dplyr)
-#library(plyr)
-#library(tidyr)
 
-arg_params = commandArgs(trailingOnly=TRUE)
+arg_params <- commandArgs(trailingOnly=TRUE)
 # test if there is at least one argument: if not, return an error
 if (length(arg_params)==0) {
   arg_params[1] <- "data.txt"
@@ -85,7 +85,7 @@ toxcast_full <- read.csv(file=arg_params[1], header=TRUE, sep="\t")
 
 #save(per_chem_assay_logc, file="per_chem_assay_logc.RData")
 
-in_vitro_per_chem_assay_logc <- ddply(toxcast_full, .(chnm, assay_name, logc, gene_name), 
+in_vitro_per_chem_assay_logc <- plyr::ddply(toxcast_full, .(chnm, assay_name, logc, gene_name), 
                                       summarise, mean_resp=mean(resp))
 
 #Toxcast assays for the ER positive ground truth
@@ -111,7 +111,13 @@ chem_assay_corr_estrogen <- apply(in_vitro_distinct_chem_assay, 1, similarity_an
                                   comparator_estimates=in_vitro_estradiol_curves, 
                                   data=in_vitro_per_chem_estrogen_assay_logc)
 
-chem_assay_corr_estrogen_df <- do.call(rbind.data.frame, chem_assay_corr_estrogen)
+#matrix_result <- do.call(rbind,chem_assay_corr_estrogen)
+#chem_assay_corr_estrogen_df <- do.call(rbind.data.frame, chem_assay_corr_estrogen)
+chem_assay_corr_estrogen_df <- as.data.frame(t(chem_assay_corr_estrogen))
+
+# chem_assay_corr_estrogen_df <- t(as.data.frame(chem_assay_corr_estrogen))
+# colnames(chem_assay_corr_estrogen_df) <- c("Chemical", "Assay", "Correlation")
+# chem_assay_corr_estrogen_df <- cbind(chem_assay_corr_estrogen_df, corr=as.numeric(chem_assay_corr_estrogen_df[,3]))
 colnames(chem_assay_corr_estrogen_df) <- c("Chemical", "Assay", "Correlation")
 
 chem_assay_corr_estrogen_wide <- spread(chem_assay_corr_estrogen_df, 
@@ -126,9 +132,10 @@ in_vitro_chem_assay_corr_estrogen_wide[nrow(in_vitro_chem_assay_corr_estrogen_wi
 rownames(in_vitro_chem_assay_corr_estrogen_wide)[nrow(in_vitro_chem_assay_corr_estrogen_wide)] <- "17-beta estradiol"
 
 #localH2O = h2o.init(max_mem_size = "13g", nthreads=6)
+print(getwd())
 localH2O = h2o.init(max_mem_size = arg_params[2], nthreads=as.numeric(arg_params[3]))
 estrogenic.hex<-as.h2o(in_vitro_chem_assay_corr_estrogen_wide, destination_frame="train.hex")
-estrogenic_autoencoder <- h2o.loadModel("DeepLearning_model_R_1481832873762_1613")
+estrogenic_autoencoder <- h2o.loadModel(path="DeepLearning_model_R_1481832873762_1613")
 estrogenic_supervised_features3 <- h2o.deepfeatures(estrogenic_autoencoder, estrogenic.hex, layer=2)
 
 
@@ -145,8 +152,7 @@ estrogenic_supervised_features3 <- h2o.deepfeatures(estrogenic_autoencoder, estr
 #This is the test error
 
 plotdata2 <- as.data.frame(estrogenic_supervised_features3)
-plotdata2$chem <- rownames(in_vitro_chem_assay_corr_estrogen_wide[50:65, ])
-
+plotdata2$chem <- rownames(in_vitro_chem_assay_corr_estrogen_wide)
 estradiol_coords <- plotdata2[which(plotdata2$chem=="17-beta estradiol"), c(1:2)]
 angle <- seq(-pi, pi, length = 50)
 circle_boundary <- data.frame(x = (sin(angle)*1.35)+estradiol_coords$DF.L2.C1, 
